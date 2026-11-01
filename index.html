@@ -29,100 +29,107 @@
           <p class="intro">AMI helps you get started, take a proper breather, and feel a little less alone at your desk.</p>
           <div class="today-chip"><span class="chip-sun">✿</span><span><b id="greeting">Good day!</b><small>Your pace is allowed to be human.</small></span></div>
         </div>
-        <div class="mascot-stage" id="ami-stage" aria-label="AMI desk companion illustration" title="Tap to pet AMI ♥">
+        <div class="mascot-stage" id="ami-stage" aria-label="AMI the floating focus buddy" title="Tap AMI to say hello ♥">
           <div class="sun-halo"></div>
           <div class="sparkle sparkle-a">✦</div><div class="sparkle sparkle-b">·</div>
           <div id="ami-hearts" class="ami-hearts-container"></div>
-          <svg class="ami-svg" viewBox="0 0 300 300" role="img" aria-label="AMI — cute robot with EVE-style face and teddy bear ears">
+          <svg class="ami-svg" viewBox="0 0 300 310" role="img" aria-label="AMI — a friendly, floating egg-shaped robot with a dark glass visor and large oval cyan eyes">
             <defs>
-              <!-- EVE Neon Cyan Eye Glow -->
-              <filter id="eve-glow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="3.2" result="blur1" />
-                <feGaussianBlur stdDeviation="6.5" result="blur2" />
+              <!-- Pearl-white shell with soft blush-pink reflections -->
+              <linearGradient id="pearl-shell" x1="0.15" y1="0.05" x2="0.85" y2="0.95">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="35%" stop-color="#fefbfb" />
+                <stop offset="70%" stop-color="#f8edeb" />
+                <stop offset="100%" stop-color="#eddcd8" />
+              </linearGradient>
+
+              <!-- Soft ambient blush-pink reflection on lower curves -->
+              <radialGradient id="blush-reflection" cx="0.5" cy="0.85" r="0.65">
+                <stop offset="0%" stop-color="#f4ceca" stop-opacity="0.55" />
+                <stop offset="55%" stop-color="#f8dedb" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </radialGradient>
+
+              <!-- Specular gloss along upper crown -->
+              <linearGradient id="crown-gloss" x1="0.1" y1="0" x2="0.5" y2="0.8">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+                <stop offset="60%" stop-color="#ffffff" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Dark smoothly rounded glass visor -->
+              <linearGradient id="visor-glass" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#19202c" />
+                <stop offset="40%" stop-color="#0c1017" />
+                <stop offset="100%" stop-color="#040609" />
+              </linearGradient>
+
+              <!-- Curved glass top reflection -->
+              <linearGradient id="visor-reflection" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2" />
+                <stop offset="50%" stop-color="#ffffff" stop-opacity="0.04" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Tasteful, soft cyan-blue eye gradient -->
+              <linearGradient id="eve-eye-cyan" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#b8f5ff" />
+                <stop offset="35%" stop-color="#41d6f2" />
+                <stop offset="100%" stop-color="#07a8cf" />
+              </linearGradient>
+
+              <!-- Tasteful soft eye glow (gentle, not harsh neon) -->
+              <filter id="soft-eye-glow" x="-35%" y="-35%" width="170%" height="170%">
+                <feGaussianBlur stdDeviation="3.2" result="blur" />
                 <feMerge>
-                  <feMergeNode in="blur2" />
-                  <feMergeNode in="blur1" />
+                  <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
-              <!-- EVE Eye Gradient: luminous electric cyan with bright white-blue core -->
-              <linearGradient id="eve-eye-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#bbf7ff" />
-                <stop offset="45%" stop-color="#3de4ff" />
-                <stop offset="100%" stop-color="#00a8e8" />
-              </linearGradient>
+
+              <!-- Ambient shadow filter -->
+              <filter id="shadow-soft" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="5.5" />
+              </filter>
             </defs>
-            <ellipse id="ami-shadow" cx="150" cy="267" rx="87" ry="13" fill="#e9d5cf" opacity=".55"/>
+
+            <!-- Floating soft shadow underneath -->
+            <ellipse id="ami-shadow" cx="150" cy="275" rx="65" ry="9" fill="#d2b8be" opacity="0.38" filter="url(#shadow-soft)"/>
+
+            <!-- Floating Robot Capsule Body (One continuous glossy white shell) -->
             <g id="ami-bot-body">
-              <!-- Teddy Bear Ears -->
-              <g id="ami-bear-ears">
-                <g class="ami-ear-left" id="ami-ear-left">
-                  <circle cx="84" cy="56" r="25" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
-                  <circle cx="84" cy="56" r="14" fill="#e8a8b1"/>
-                </g>
-                <g class="ami-ear-right" id="ami-ear-right">
-                  <circle cx="216" cy="56" r="25" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
-                  <circle cx="216" cy="56" r="14" fill="#e8a8b1"/>
-                </g>
-              </g>
+              <!-- Smooth compact floating capsule/egg shape (tapered at top, rounded underneath) -->
+              <path class="ami-shell" d="M 150 48 C 190 48, 234 92, 234 156 C 234 218, 198 254, 150 254 C 102 254, 66 218, 66 156 C 66 92, 110 48, 150 48 Z" fill="url(#pearl-shell)" stroke="#ebd9d5" stroke-width="1.8"/>
 
-              <!-- Antenna -->
-              <g id="ami-antenna">
-                <path d="M150 38v24" stroke="#a76572" stroke-width="8" stroke-linecap="round"/>
-                <circle cx="150" cy="33" r="12" fill="#dc9ba3"/>
-                <circle cx="150" cy="31" r="4" fill="#fff4ee"/>
-              </g>
+              <!-- Subtle blush-pink ambient reflection -->
+              <path d="M 150 48 C 190 48, 234 92, 234 156 C 234 218, 198 254, 150 254 C 102 254, 66 218, 66 156 C 66 92, 110 48, 150 48 Z" fill="url(#blush-reflection)"/>
 
-              <!-- Head Body -->
-              <rect x="57" y="61" width="186" height="166" rx="56" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
-              <path d="M75 98c0-15 12-27 27-27h96c15 0 27 12 27 27v13H75z" fill="#f7dad5" opacity=".85"/>
-              
-              <!-- EVE-style Visor: Deep obsidian black with curved top reflection -->
-              <rect id="ami-screen" x="72" y="96" width="156" height="98" rx="42" fill="#0b0e14" stroke="#1d2638" stroke-width="2.5"/>
-              <path d="M80 120 C85 104, 114 99, 150 99 C186 99, 215 104, 220 120 C206 108, 176 104, 150 104 C124 104, 94 108, 80 120 Z" fill="#ffffff" opacity="0.14"/>
-              
-              <!-- Soft cyber blush -->
-              <ellipse id="ami-blush-left" cx="95" cy="162" rx="10" ry="5" fill="#00d4ff" opacity="0.25"/>
-              <ellipse id="ami-blush-right" cx="205" cy="162" rx="10" ry="5" fill="#00d4ff" opacity="0.25"/>
+              <!-- Glossy specular reflection on upper-left crown -->
+              <path d="M 102 65 C 122 52, 150 51, 172 56 C 152 54, 122 56, 102 65 Z" fill="url(#crown-gloss)"/>
 
-              <!-- EVE Glowing Blue Eyes (Normal / Tracking) -->
-              <g id="ami-eyes-normal">
-                <!-- Left Eye Group -->
-                <g id="ami-eye-left" style="transform-origin: 116px 144px;">
-                  <path class="eve-eye-shape" d="M 103 145 C 104 133, 127 132, 129 143 C 129 150, 122 154, 116 154 C 110 154, 103 150, 103 145 Z" fill="url(#eve-eye-grad)" filter="url(#eve-glow)"/>
-                  <!-- Scanlines -->
-                  <line x1="104.5" y1="139" x2="127.5" y2="139" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
-                  <line x1="103.5" y1="144" x2="128.5" y2="144" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
-                  <line x1="105" y1="149" x2="127" y2="149" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
+              <!-- Dark, smoothly rounded glass visor -->
+              <path id="ami-screen" d="M 150 90 C 185 90, 212 106, 212 129 C 212 152, 185 168, 150 168 C 115 168, 88 152, 88 129 C 88 106, 115 90, 150 90 Z" fill="url(#visor-glass)" stroke="#222c3d" stroke-width="1.5"/>
+
+              <!-- Visor top glass reflection curve -->
+              <path d="M 96 114 C 112 97, 142 94, 172 95 C 188 96, 198 102, 204 114 C 188 103, 158 99, 134 99 C 114 99, 102 105, 96 114 Z" fill="url(#visor-reflection)"/>
+
+              <!-- Two large, vertically oval cyan-blue eyes (eyes are the whole expression) -->
+              <g id="ami-eyes-container">
+                <!-- Left Eye -->
+                <g id="ami-eye-left" style="transform-origin: 125px 129px;">
+                  <ellipse class="ami-eve-eye" cx="125" cy="129" rx="10.5" ry="15.5" fill="url(#eve-eye-cyan)" filter="url(#soft-eye-glow)"/>
+                  <ellipse cx="122.5" cy="123" rx="2.5" ry="4" fill="#ffffff" opacity="0.6"/>
                 </g>
-                <!-- Right Eye Group -->
-                <g id="ami-eye-right" style="transform-origin: 184px 144px;">
-                  <path class="eve-eye-shape" d="M 197 145 C 196 133, 173 132, 171 143 C 171 150, 178 154, 184 154 C 190 154, 197 150, 197 145 Z" fill="url(#eve-eye-grad)" filter="url(#eve-glow)"/>
-                  <!-- Scanlines -->
-                  <line x1="172.5" y1="139" x2="195.5" y2="139" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
-                  <line x1="171.5" y1="144" x2="196.5" y2="144" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
-                  <line x1="173" y1="149" x2="195" y2="149" stroke="#0b0e14" stroke-width="1.2" opacity="0.5"/>
+                <!-- Right Eye -->
+                <g id="ami-eye-right" style="transform-origin: 175px 129px;">
+                  <ellipse class="ami-eve-eye" cx="175" cy="129" rx="10.5" ry="15.5" fill="url(#eve-eye-cyan)" filter="url(#soft-eye-glow)"/>
+                  <ellipse cx="172.5" cy="123" rx="2.5" ry="4" fill="#ffffff" opacity="0.6"/>
                 </g>
               </g>
-
-              <!-- Happy smiling curved eyes (^ ^) - EVE style glowing cyan crescent arches -->
-              <g id="ami-eyes-happy" style="display: none;">
-                <path d="M 103 148 C 107 132, 125 132, 129 148" fill="none" stroke="url(#eve-eye-grad)" stroke-width="5" stroke-linecap="round" filter="url(#eve-glow)"/>
-                <path d="M 171 148 C 175 132, 193 132, 197 148" fill="none" stroke="url(#eve-eye-grad)" stroke-width="5" stroke-linecap="round" filter="url(#eve-glow)"/>
-              </g>
-
-              <!-- Relaxed / sleeping eyes (~ ~) - EVE resting mode -->
-              <g id="ami-eyes-sleep" style="display: none;">
-                <path d="M 104 144 C 110 150, 122 150, 128 144" fill="none" stroke="url(#eve-eye-grad)" stroke-width="4.5" stroke-linecap="round" filter="url(#eve-glow)"/>
-                <path d="M 172 144 C 178 150, 190 150, 196 144" fill="none" stroke="url(#eve-eye-grad)" stroke-width="4.5" stroke-linecap="round" filter="url(#eve-glow)"/>
-              </g>
-
-              <path d="M90 222v18q0 17 17 17h13" fill="none" stroke="#9e5f6b" stroke-width="7" stroke-linecap="round"/>
-              <path d="M210 222v18q0 17-17 17h-13" fill="none" stroke="#9e5f6b" stroke-width="7" stroke-linecap="round"/>
-              <rect x="126" y="228" width="48" height="21" rx="10" fill="#d88792" stroke="#9e5f6b" stroke-width="3"/>
-              <path d="M136 238h28" stroke="#fff2ed" stroke-width="3" stroke-linecap="round"/>
-              <path d="M84 202q66 22 132 0" fill="none" stroke="#fff3ec" stroke-width="4" opacity=".8"/>
             </g>
+          </svg>
+          <div class="mascot-caption"><span class="online-pip"></span> <span id="ami-caption-text">AMI is here with you</span></div>
+        </div>
           </svg>
           <div class="mascot-caption"><span class="online-pip"></span> <span id="ami-caption-text">AMI is here with you</span></div>
         </div>

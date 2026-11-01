@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff6f3">
+  <meta name="description" content="AMI — a warm little focus buddy for your desk.">
+  <title>AMI — The Focus Buddy</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="AMI home">
+        <span class="brand-icon" aria-hidden="true">a</span>
+        <span><b>ami</b><small>THE FOCUS BUDDY</small></span>
+      </a>
+      <div class="top-status"><span class="status-light" id="api-dot"></span><span id="api-status">checking buddy…</span></div>
+      <button class="icon-btn" id="settings-open" aria-label="Open preferences" title="Preferences">☼</button>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-heart">♥</span> A SMALL FRIEND FOR BIG DAYS</div>
+          <h1>One thing<br>at a time<span class="period">.</span></h1>
+          <p class="intro">AMI helps you get started, take a proper breather, and feel a little less alone at your desk.</p>
+          <div class="today-chip"><span class="chip-sun">✿</span><span><b id="greeting">Good day!</b><small>Your pace is allowed to be human.</small></span></div>
+        </div>
+        <div class="mascot-stage" id="ami-stage" aria-label="AMI the floating focus buddy" title="Tap AMI to say hello ♥">
+          <div class="sun-halo"></div>
+          <div class="sparkle sparkle-a">✦</div><div class="sparkle sparkle-b">·</div>
+          <div id="ami-hearts" class="ami-hearts-container"></div>
+          <svg class="ami-svg" viewBox="0 0 300 310" role="img" aria-label="AMI — a friendly, floating egg-shaped robot with a dark glass visor and large oval cyan eyes">
+            <defs>
+              <!-- Pearl-white shell with soft blush-pink reflections -->
+              <linearGradient id="pearl-shell" x1="0.15" y1="0.05" x2="0.85" y2="0.95">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="35%" stop-color="#fefbfb" />
+                <stop offset="70%" stop-color="#f8edeb" />
+                <stop offset="100%" stop-color="#eddcd8" />
+              </linearGradient>
+
+              <!-- Soft ambient blush-pink reflection on lower curves -->
+              <radialGradient id="blush-reflection" cx="0.5" cy="0.85" r="0.65">
+                <stop offset="0%" stop-color="#f4ceca" stop-opacity="0.55" />
+                <stop offset="55%" stop-color="#f8dedb" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </radialGradient>
+
+              <!-- Specular gloss along upper crown -->
+              <linearGradient id="crown-gloss" x1="0.1" y1="0" x2="0.5" y2="0.8">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+                <stop offset="60%" stop-color="#ffffff" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Dark smoothly rounded glass visor -->
+              <linearGradient id="visor-glass" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#19202c" />
+                <stop offset="40%" stop-color="#0c1017" />
+                <stop offset="100%" stop-color="#040609" />
+              </linearGradient>
+
+              <!-- Curved glass top reflection -->
+              <linearGradient id="visor-reflection" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2" />
+                <stop offset="50%" stop-color="#ffffff" stop-opacity="0.04" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Tasteful, soft cyan-blue eye gradient -->
+              <linearGradient id="eve-eye-cyan" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#b8f5ff" />
+                <stop offset="35%" stop-color="#41d6f2" />
+                <stop offset="100%" stop-color="#07a8cf" />
+              </linearGradient>
+
+              <!-- Tasteful soft eye glow (gentle, not harsh neon) -->
+              <filter id="soft-eye-glow" x="-35%" y="-35%" width="170%" height="170%">
+                <feGaussianBlur stdDeviation="3.2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <!-- Ambient shadow filter -->
+              <filter id="shadow-soft" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="5.5" />
+              </filter>
+            </defs>
+
+            <!-- Floating soft shadow underneath -->
+            <ellipse id="ami-shadow" cx="150" cy="275" rx="65" ry="9" fill="#d2b8be" opacity="0.38" filter="url(#shadow-soft)"/>
+
+            <!-- Floating Robot Capsule Body (One continuous glossy white shell) -->
+            <g id="ami-bot-body">
+              <!-- Smooth compact floating capsule/egg shape (tapered at top, rounded underneath) -->
+              <path class="ami-shell" d="M 150 48 C 190 48, 234 92, 234 156 C 234 218, 198 254, 150 254 C 102 254, 66 218, 66 156 C 66 92, 110 48, 150 48 Z" fill="url(#pearl-shell)" stroke="#ebd9d5" stroke-width="1.8"/>
+
+              <!-- Subtle blush-pink ambient reflection -->
+              <path d="M 150 48 C 190 48, 234 92, 234 156 C 234 218, 198 254, 150 254 C 102 254, 66 218, 66 156 C 66 92, 110 48, 150 48 Z" fill="url(#blush-reflection)"/>
+
+              <!-- Glossy specular reflection on upper-left crown -->
+              <path d="M 102 65 C 122 52, 150 51, 172 56 C 152 54, 122 56, 102 65 Z" fill="url(#crown-gloss)"/>
+
+              <!-- Dark, smoothly rounded glass visor -->
+              <path id="ami-screen" d="M 150 90 C 185 90, 212 106, 212 129 C 212 152, 185 168, 150 168 C 115 168, 88 152, 88 129 C 88 106, 115 90, 150 90 Z" fill="url(#visor-glass)" stroke="#222c3d" stroke-width="1.5"/>
+
+              <!-- Visor top glass reflection curve -->
+              <path d="M 96 114 C 112 97, 142 94, 172 95 C 188 96, 198 102, 204 114 C 188 103, 158 99, 134 99 C 114 99, 102 105, 96 114 Z" fill="url(#visor-reflection)"/>
+
+              <!-- Two large, vertically oval cyan-blue eyes (eyes are the whole expression) -->
+              <g id="ami-eyes-container">
+                <!-- Left Eye -->
+                <g id="ami-eye-left" style="transform-origin: 125px 129px;">
+                  <ellipse class="ami-eve-eye" cx="125" cy="129" rx="10.5" ry="15.5" fill="url(#eve-eye-cyan)" filter="url(#soft-eye-glow)"/>
+                  <ellipse cx="122.5" cy="123" rx="2.5" ry="4" fill="#ffffff" opacity="0.6"/>
+                </g>
+                <!-- Right Eye -->
+                <g id="ami-eye-right" style="transform-origin: 175px 129px;">
+                  <ellipse class="ami-eve-eye" cx="175" cy="129" rx="10.5" ry="15.5" fill="url(#eve-eye-cyan)" filter="url(#soft-eye-glow)"/>
+                  <ellipse cx="172.5" cy="123" rx="2.5" ry="4" fill="#ffffff" opacity="0.6"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <div class="mascot-caption"><span class="online-pip"></span> <span id="ami-caption-text">AMI is here with you</span></div>
+        </div>
+          </svg>
+          <div class="mascot-caption"><span class="online-pip"></span> <span id="ami-caption-text">AMI is here with you</span></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid" aria-label="Focus dashboard">
+        <article class="card focus-card">
+          <div class="card-head"><div><span class="section-label">YOUR FOCUS SESSION</span><h2>Let’s get into it</h2></div><span class="tiny-icon">◷</span></div>
+          <div class="mode-tabs" role="group" aria-label="Choose a focus mode">
+            <button class="mode-tab active" data-mode="study">Study</button>
+            <button class="mode-tab" data-mode="work">Work</button>
+            <button class="mode-tab" data-mode="reset">Reset</button>
+          </div>
+          <div class="timer-wrap">
+            <div class="timer-ring" id="timer-ring"><div class="timer-inner"><span id="timer-display">25:00</span><small id="timer-label">READY WHEN YOU ARE</small></div></div>
+          </div>
+          <div class="focus-actions"><button class="primary-btn" id="focus-start">Start focus</button><button class="quiet-btn" id="focus-finish" disabled>Finish early</button></div><div class="break-start-wrap"><button class="voice-btn break-start" id="break-start" type="button" hidden>Start your break</button></div>
+          <div class="focus-foot"><span>✿ <span id="cycle-label">25 min focus · 5 min break</span></span><span id="focus-state">No pressure. Just begin.</span></div>
+        </article>
+
+        <article class="card break-card">
+          <div class="card-head"><div><span class="section-label">A KIND LITTLE NUDGE</span><h2>Breaks count too</h2></div><span class="tiny-icon flower">✿</span></div>
+          <p class="card-copy">AMI will remind you gently. Pick a rhythm that feels doable today.</p>
+          <div class="cycle-selects">
+            <label>Work cycle<select id="work-cycle"><option value="25">25 minutes</option><option value="50">50 minutes</option><option value="40">40 minutes</option></select></label>
+            <label>Break<select id="break-cycle"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option></select></label>
+          </div>
+          <div class="nudge-list">
+            <div><span class="nudge-emoji">👀</span><span><b>Rest your eyes</b><small>Look far away for a moment</small></span><span class="nudge-time">20m</span></div>
+            <div><span class="nudge-emoji">🫶</span><span><b>Stretch a little</b><small>Unclench your shoulders</small></span><span class="nudge-time">50m</span></div>
+            <div><span class="nudge-emoji">💧</span><span><b>Have some water</b><small>One sip is a good start</small></span><span class="nudge-time">45m</span></div>
+          </div>
+          <div class="break-treat"><span>A tiny treat for break time</span><div><button data-say="Tell me a joke">Joke</button><button data-say="Tell me a fun fact">Trivia</button><button data-say="Give me a riddle">Riddle</button><button data-say="Tell me a mini story">Mini story</button></div></div>
+          <div class="local-note">♡ Gentle reminders, never a scolding.</div>
+        </article>
+
+        <article class="card music-card">
+          <div class="card-head"><div><span class="section-label">SOUNDTRACK FOR THIS MOMENT</span><h2>Pick your mood</h2></div><span class="tiny-icon">♫</span></div>
+          <p class="card-copy">AMI plays royalty-free tracks from its microSD card.</p>
+          <div class="music-modes" role="group" aria-label="Music mood">
+            <button class="music-mode active" data-music="focus"><span>☁</span><b>Focus</b><small>soft & steady</small></button>
+            <button class="music-mode" data-music="relax"><span>☾</span><b>Relax</b><small>slow it down</small></button>
+            <button class="music-mode" data-music="energise"><span>☀</span><b>Energise</b><small>gentle lift</small></button>
+          </div>
+          <div class="music-now"><div class="album-dot">♫</div><div><b id="music-title">Choose a mood</b><small id="music-subtitle">Your desk buddy will play locally</small></div><button class="play-btn" id="music-play" aria-label="Toggle local music">▶</button></div>
+          <div class="local-note" id="music-state">Music is played on AMI from the SD card; no streaming by default.</div>
+        </article>
+
+        <article class="card reminder-card">
+          <div class="card-head"><div><span class="section-label">KEEP IT ON YOUR RADAR</span><h2>Small reminders</h2></div><span class="tiny-icon">⌁</span></div>
+          <form id="reminder-form" class="reminder-form">
+            <label class="sr-only" for="reminder-text">Reminder text</label>
+            <input id="reminder-text" maxlength="160" placeholder="e.g. submit my assignment" required>
+            <label class="sr-only" for="reminder-time">Reminder time</label>
+            <input id="reminder-time" type="datetime-local" required>
+            <div class="reminder-actions"><button class="primary-btn small" type="submit">Add reminder</button><button class="voice-btn" id="voice-reminder" type="button">🎙 Say it</button></div>
+          </form>
+          <div class="reminder-list" id="reminder-list"><div class="empty-state">Your reminders will show up here.</div></div>
+          <div class="local-note" id="voice-note">Voice input uses your browser’s speech recognition when available.</div>
+        </article>
+
+        <article class="card chat-card">
+          <div class="card-head"><div><span class="section-label">A FRIENDLY CHECK-IN</span><h2>Talk to AMI</h2></div><div class="ami-online"><span></span> ready</div></div>
+          <div class="chat-log" id="chat-log" aria-live="polite"><div class="bubble ami-bubble">Hey, I’m here. What’s on your mind—or should we pick one tiny thing to start? <span class="bubble-heart">♥</span></div></div>
+          <div class="quick-replies"><button data-say="I feel distracted">I’m distracted</button><button data-say="I feel tired">I’m tired</button><button data-say="Tell me a joke">Tiny joke?</button></div>
+          <form id="chat-form" class="chat-form"><label class="sr-only" for="chat-input">Message AMI</label><input id="chat-input" maxlength="2000" placeholder="Tell AMI what’s up…" autocomplete="off" required><button id="chat-mic" class="mic-btn" type="button" aria-label="Speak to AMI">🎙</button><button class="send-btn" type="submit" aria-label="Send message">↑</button></form>
+          <div class="chat-foot"><span>Short, kind, and honest.</span><button id="speak-toggle" class="text-toggle" type="button" aria-pressed="false">Read replies aloud: off</button></div>
+        </article>
+
+        <article class="card progress-card">
+          <div class="card-head"><div><span class="section-label">REAL PROGRESS, NOT PERFECTION</span><h2>You showed up</h2></div><span class="tiny-icon">✧</span></div>
+          <div class="stats-row"><div><strong id="stat-sessions">0</strong><small>sessions</small></div><div><strong id="stat-minutes">0</strong><small>focus min</small></div><div><strong id="stat-streak">0</strong><small>day streak</small></div></div>
+          <div class="streak-note" id="adaptive-note">Every finished session teaches AMI what works for you.</div>
+          <button class="text-toggle adaptive-apply" id="apply-adaptive" type="button">Use AMI’s suggested rhythm</button>
+          <div class="little-star-row" aria-hidden="true">✿　✦　♡　✦　✿</div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer"><span>AMI · The Focus Buddy</span><span>Local-first by default. Your progress stays with your server.</span></footer>
+  </div>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <form method="dialog" class="dialog-head"><div><span class="section-label">YOUR AMI, YOUR WAY</span><h2>Preferences</h2></div><button class="icon-btn close-dialog" aria-label="Close">×</button></form>
+    <div class="dialog-body">
+      <label>Long break every <select id="long-break-every"><option value="4">4 sessions</option><option value="3">3 sessions</option><option value="5">5 sessions</option></select></label>
+      <label>AMI’s nudge style <select id="nudge-style"><option value="gentle">Gentle</option><option value="direct">Direct, but kind</option><option value="quiet">Quiet</option></select></label>
+      <label class="voice-setting"><span>Spoken reminders on the robot</span><input id="voice-enabled" type="checkbox" checked></label>
+      <label>Eye rest interval <select id="eye-interval"><option value="20">20 minutes</option><option value="25">25 minutes</option><option value="30">30 minutes</option></select></label>
+      <label>Stretch reminder <select id="stretch-interval"><option value="50">50 minutes</option><option value="40">40 minutes</option><option value="60">60 minutes</option></select></label>
+      <label>Water reminder <select id="water-interval"><option value="45">45 minutes</option><option value="30">30 minutes</option><option value="60">60 minutes</option></select></label>
+      <p class="dialog-note">These are gentle defaults, not medical advice. Change or turn them off whenever you like.</p>
+      <button id="save-settings" class="primary-btn" type="button">Save preferences</button>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -166,10 +166,16 @@ function renderTimer() {
     $("#focus-finish").disabled = true; $("#focus-finish").textContent = "Finish early";
     $("#focus-state").textContent = "No pressure. Just begin."; setTimerRing(0);
     breakButton.hidden = !state.breakReady; breakButton.textContent = `Start your ${state.breakDuration}-minute break`;
+    $("#ami-stage")?.classList.remove("focus-active");
     if (window.setAmiExpression && !window.amiIsInteracting) window.setAmiExpression("normal");
     return;
   }
   const isBreak = state.active.mode === "break";
+  if (isBreak) {
+    $("#ami-stage")?.classList.remove("focus-active");
+  } else {
+    $("#ami-stage")?.classList.add("focus-active");
+  }
   if (window.setAmiExpression && !window.amiIsInteracting) window.setAmiExpression(isBreak ? "sleep" : "focus");
   const total = Number(state.active.planned_minutes) * 60;
   const start = new Date(state.active.started_at).getTime();
@@ -377,16 +383,8 @@ function initAmiMotion() {
   const stage = document.getElementById("ami-stage");
   const svg = document.querySelector(".ami-svg");
   const robot = document.getElementById("ami-bot-body");
-  const antenna = document.getElementById("ami-antenna");
-  const earL = document.getElementById("ami-ear-left");
-  const earR = document.getElementById("ami-ear-right");
   const eyeL = document.getElementById("ami-eye-left");
   const eyeR = document.getElementById("ami-eye-right");
-  const blushL = document.getElementById("ami-blush-left");
-  const blushR = document.getElementById("ami-blush-right");
-  const eyesNormal = document.getElementById("ami-eyes-normal");
-  const eyesHappy = document.getElementById("ami-eyes-happy");
-  const eyesSleep = document.getElementById("ami-eyes-sleep");
   const heartsContainer = document.getElementById("ami-hearts");
   const captionText = document.getElementById("ami-caption-text");
 
@@ -400,14 +398,14 @@ function initAmiMotion() {
   let blinkTimeout = null;
   let isBlinking = false;
 
-  const MAX_EYE_X = 11.0;
-  const MAX_EYE_Y = 7.5;
+  const MAX_EYE_X = 8.5;
+  const MAX_EYE_Y = 5.5;
 
   function updatePoint(x, y) {
     const rect = svg.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
     const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height * 0.45;
+    const centerY = rect.top + rect.height * 0.42;
     const dx = x - centerX;
     const dy = y - centerY;
     const dist = Math.hypot(dx, dy);
@@ -438,7 +436,7 @@ function initAmiMotion() {
 
   window.addEventListener("pointerleave", () => {
     targetX = 0;
-    targetY = 0.12;
+    targetY = 0.1;
   });
 
   // RAF loop for buttery 60fps tracking
@@ -451,39 +449,34 @@ function initAmiMotion() {
 
     if (eyeL && eyeR && !isBlinking) {
       if (currentExpression === "focus") {
-        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.92, 0.82) rotate(-3deg)`;
-        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.92, 0.82) rotate(3deg)`;
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.95, 0.86)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.95, 0.86)`;
+      } else if (currentExpression === "sleep") {
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.96, 0.45) translateY(2px)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.96, 0.45) translateY(2px)`;
+      } else if (currentExpression === "happy") {
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(1.08, 1.08)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(1.08, 1.08)`;
       } else {
-        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
-        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(1, 1)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(1, 1)`;
       }
     }
 
     if (robot) {
-      const tilt = currentX * 3.8;
-      const hx = currentX * 4.5;
-      const hy = currentY * 3.2;
+      const tilt = currentX * 2.8;
+      const hx = currentX * 3.5;
+      const hy = currentY * 2.5;
       robot.style.transform = `translate(${hx.toFixed(2)}px, ${hy.toFixed(2)}px) rotate(${tilt.toFixed(2)}deg)`;
-    }
-
-    if (antenna) {
-      const antTilt = -currentX * 7.5;
-      antenna.style.transform = `rotate(${antTilt.toFixed(2)}deg)`;
-    }
-
-    if (earL && earR) {
-      const earTilt = -currentX * 4.2;
-      earL.style.transform = `rotate(${earTilt.toFixed(2)}deg)`;
-      earR.style.transform = `rotate(${earTilt.toFixed(2)}deg)`;
     }
 
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 
-  // EVE Digital Eye Blink
+  // Digital Eye Blink
   function doBlink() {
-    if (currentExpression === "happy" || currentExpression === "sleep") {
+    if (currentExpression === "sleep") {
       scheduleBlink();
       return;
     }
@@ -497,7 +490,7 @@ function initAmiMotion() {
         eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
         eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
         isBlinking = false;
-        if (Math.random() < 0.25) {
+        if (Math.random() < 0.22) {
           setTimeout(() => {
             isBlinking = true;
             eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(0.06)`;
@@ -528,33 +521,17 @@ function initAmiMotion() {
   window.setAmiExpression = function(expr) {
     currentExpression = expr;
     if (expr === "happy") {
-      if (eyesNormal) eyesNormal.style.display = "none";
-      if (eyesSleep) eyesSleep.style.display = "none";
-      if (eyesHappy) eyesHappy.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.85"; blushR.style.opacity = "0.85"; }
-      if (captionText) captionText.textContent = "AMI is smiling with you ♥";
+      if (captionText) captionText.textContent = "AMI is happy you’re here ♥";
     } else if (expr === "sleep") {
-      if (eyesNormal) eyesNormal.style.display = "none";
-      if (eyesHappy) eyesHappy.style.display = "none";
-      if (eyesSleep) eyesSleep.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.35"; blushR.style.opacity = "0.35"; }
       if (captionText) captionText.textContent = "AMI is resting with you ☾";
     } else if (expr === "focus") {
-      if (eyesHappy) eyesHappy.style.display = "none";
-      if (eyesSleep) eyesSleep.style.display = "none";
-      if (eyesNormal) eyesNormal.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.25"; blushR.style.opacity = "0.25"; }
-      if (captionText) captionText.textContent = "AMI is focusing alongside you ✿";
+      if (captionText) captionText.textContent = "AMI is gently focusing with you ✿";
     } else {
-      if (eyesHappy) eyesHappy.style.display = "none";
-      if (eyesSleep) eyesSleep.style.display = "none";
-      if (eyesNormal) eyesNormal.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.25"; blushR.style.opacity = "0.25"; }
       if (captionText) captionText.textContent = "AMI is here with you";
     }
   };
 
-  // EVE-Style Cheerful Electronic Chirp
+  // Soft Electronic Sound Chime
   function playCuteSound() {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -567,12 +544,12 @@ function initAmiMotion() {
       osc.frequency.setValueAtTime(783.99, now); // G5
       osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.08); // C6
       osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.16); // E6
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+      gain.gain.setValueAtTime(0.07, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.35);
+      osc.stop(now + 0.32);
     } catch (_) {}
   }
 
@@ -582,7 +559,7 @@ function initAmiMotion() {
     const heart = document.createElement("div");
     heart.className = "ami-floating-heart";
     heart.textContent = Math.random() < 0.35 ? "✨" : "♥";
-    const offset = (Math.random() - 0.5) * 70;
+    const offset = (Math.random() - 0.5) * 60;
     heart.style.left = `calc(50% + ${offset}px)`;
     heart.style.bottom = "85px";
     heartsContainer.appendChild(heart);
@@ -596,14 +573,8 @@ function initAmiMotion() {
     }
     window.setAmiExpression("happy");
     svg.classList.add("ami-pet-bounce");
-    if (antenna) antenna.classList.add("antenna-spring");
-    if (earL) earL.classList.add("ear-wiggle-left");
-    if (earR) earR.classList.add("ear-wiggle-right");
     setTimeout(() => {
       svg.classList.remove("ami-pet-bounce");
-      if (antenna) antenna.classList.remove("antenna-spring");
-      if (earL) earL.classList.remove("ear-wiggle-left");
-      if (earR) earR.classList.remove("ear-wiggle-right");
       if (state.active && state.active.mode === "break") {
         window.setAmiExpression("sleep");
       } else {
@@ -614,11 +585,11 @@ function initAmiMotion() {
 
   // Tap & Pet Responses
   const petLines = [
-    "*peep!* AMI is cheering for you! ♥",
-    "pat pat received! Kita lock in sama-sama.",
+    "*beep-boop!* AMI is cheering for you! ♥",
+    "pat pat received! Kita focus sama-sama.",
     "One small step at a time, you got this! ✨",
     "Tarik nafas... okay, jom sambung!",
-    "AMI is right here with you! ✿"
+    "AMI is right here floating with you! ✿"
   ];
 
   function handlePet(e) {
@@ -628,18 +599,12 @@ function initAmiMotion() {
     spawnHeart();
     window.setAmiExpression("happy");
     svg.classList.add("ami-pet-bounce");
-    if (antenna) antenna.classList.add("antenna-spring");
-    if (earL) earL.classList.add("ear-wiggle-left");
-    if (earR) earR.classList.add("ear-wiggle-right");
 
     const line = petLines[Math.floor(Math.random() * petLines.length)];
     toast(line);
 
     setTimeout(() => {
       svg.classList.remove("ami-pet-bounce");
-      if (antenna) antenna.classList.remove("antenna-spring");
-      if (earL) earL.classList.remove("ear-wiggle-left");
-      if (earR) earR.classList.remove("ear-wiggle-right");
       window.amiIsInteracting = false;
       if (state.active && state.active.mode === "break") {
         window.setAmiExpression("sleep");
@@ -648,7 +613,7 @@ function initAmiMotion() {
       } else {
         window.setAmiExpression("normal");
       }
-    }, 900);
+    }, 850);
   }
 
   stage.addEventListener("click", handlePet);
