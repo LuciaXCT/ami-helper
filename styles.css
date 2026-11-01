@@ -55,18 +55,17 @@
   100% { transform: rotate(0deg); }
 }
 #ami-eye-left, #ami-eye-right {
-  transform-origin: center;
-  transition: transform 0.12s ease-in-out;
+  transition: transform 0.08s ease-out;
   will-change: transform;
 }
 #ami-eye-left {
-  transform-origin: 119px 142px;
+  transform-origin: 116px 144px;
 }
 #ami-eye-right {
-  transform-origin: 181px 142px;
+  transform-origin: 184px 144px;
 }
-#ami-pupil-left, #ami-pupil-right, #ami-shine-left, #ami-shine-right {
-  transition: cx 0.06s ease-out, cy 0.06s ease-out;
+.eve-eye-shape {
+  filter: drop-shadow(0 0 7px rgba(0, 220, 255, 0.85));
 }
 #ami-blush-left, #ami-blush-right {
   transition: opacity 0.3s ease;

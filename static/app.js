@@ -380,10 +380,6 @@ function initAmiMotion() {
   const antenna = document.getElementById("ami-antenna");
   const earL = document.getElementById("ami-ear-left");
   const earR = document.getElementById("ami-ear-right");
-  const pupilL = document.getElementById("ami-pupil-left");
-  const pupilR = document.getElementById("ami-pupil-right");
-  const shineL = document.getElementById("ami-shine-left");
-  const shineR = document.getElementById("ami-shine-right");
   const eyeL = document.getElementById("ami-eye-left");
   const eyeR = document.getElementById("ami-eye-right");
   const blushL = document.getElementById("ami-blush-left");
@@ -394,7 +390,7 @@ function initAmiMotion() {
   const heartsContainer = document.getElementById("ami-hearts");
   const captionText = document.getElementById("ami-caption-text");
 
-  if (!stage || !svg || !pupilL || !pupilR) return;
+  if (!stage || !svg || !eyeL || !eyeR) return;
 
   let targetX = 0;
   let targetY = 0;
@@ -402,9 +398,10 @@ function initAmiMotion() {
   let currentY = 0;
   let currentExpression = "normal";
   let blinkTimeout = null;
+  let isBlinking = false;
 
-  const MAX_PUPIL_X = 5.2;
-  const MAX_PUPIL_Y = 6.0;
+  const MAX_EYE_X = 11.0;
+  const MAX_EYE_Y = 7.5;
 
   function updatePoint(x, y) {
     const rect = svg.getBoundingClientRect();
@@ -441,7 +438,7 @@ function initAmiMotion() {
 
   window.addEventListener("pointerleave", () => {
     targetX = 0;
-    targetY = 0.15;
+    targetY = 0.12;
   });
 
   // RAF loop for buttery 60fps tracking
@@ -449,19 +446,17 @@ function initAmiMotion() {
     currentX += (targetX - currentX) * 0.12;
     currentY += (targetY - currentY) * 0.12;
 
-    const px = currentX * MAX_PUPIL_X;
-    const py = currentY * MAX_PUPIL_Y;
+    const eyeX = (currentX * MAX_EYE_X).toFixed(2);
+    const eyeY = (currentY * MAX_EYE_Y).toFixed(2);
 
-    pupilL.setAttribute("cx", (119 + px).toFixed(2));
-    pupilL.setAttribute("cy", (142 + py).toFixed(2));
-    pupilR.setAttribute("cx", (181 + px).toFixed(2));
-    pupilR.setAttribute("cy", (142 + py).toFixed(2));
-
-    if (shineL && shineR) {
-      shineL.setAttribute("cx", (117 + px * 0.65).toFixed(2));
-      shineL.setAttribute("cy", (138 + py * 0.65).toFixed(2));
-      shineR.setAttribute("cx", (179 + px * 0.65).toFixed(2));
-      shineR.setAttribute("cy", (138 + py * 0.65).toFixed(2));
+    if (eyeL && eyeR && !isBlinking) {
+      if (currentExpression === "focus") {
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.92, 0.82) rotate(-3deg)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scale(0.92, 0.82) rotate(3deg)`;
+      } else {
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+      }
     }
 
     if (robot) {
@@ -486,32 +481,38 @@ function initAmiMotion() {
   }
   requestAnimationFrame(loop);
 
-  // Natural Blinking
+  // EVE Digital Eye Blink
   function doBlink() {
     if (currentExpression === "happy" || currentExpression === "sleep") {
       scheduleBlink();
       return;
     }
     if (eyeL && eyeR) {
-      eyeL.style.transform = "scaleY(0.08)";
-      eyeR.style.transform = "scaleY(0.08)";
+      isBlinking = true;
+      const eyeX = (currentX * MAX_EYE_X).toFixed(2);
+      const eyeY = (currentY * MAX_EYE_Y).toFixed(2);
+      eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(0.06)`;
+      eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(0.06)`;
       setTimeout(() => {
-        eyeL.style.transform = "scaleY(1)";
-        eyeR.style.transform = "scaleY(1)";
-        if (Math.random() < 0.22) {
+        eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
+        eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
+        isBlinking = false;
+        if (Math.random() < 0.25) {
           setTimeout(() => {
-            eyeL.style.transform = "scaleY(0.08)";
-            eyeR.style.transform = "scaleY(0.08)";
+            isBlinking = true;
+            eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(0.06)`;
+            eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(0.06)`;
             setTimeout(() => {
-              eyeL.style.transform = "scaleY(1)";
-              eyeR.style.transform = "scaleY(1)";
+              eyeL.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
+              eyeR.style.transform = `translate(${eyeX}px, ${eyeY}px) scaleY(1)`;
+              isBlinking = false;
               scheduleBlink();
-            }, 100);
+            }, 90);
           }, 110);
         } else {
           scheduleBlink();
         }
-      }, 120);
+      }, 110);
     } else {
       scheduleBlink();
     }
@@ -530,30 +531,30 @@ function initAmiMotion() {
       if (eyesNormal) eyesNormal.style.display = "none";
       if (eyesSleep) eyesSleep.style.display = "none";
       if (eyesHappy) eyesHappy.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.9"; blushR.style.opacity = "0.9"; }
+      if (blushL && blushR) { blushL.style.opacity = "0.85"; blushR.style.opacity = "0.85"; }
       if (captionText) captionText.textContent = "AMI is smiling with you ♥";
     } else if (expr === "sleep") {
       if (eyesNormal) eyesNormal.style.display = "none";
       if (eyesHappy) eyesHappy.style.display = "none";
       if (eyesSleep) eyesSleep.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.55"; blushR.style.opacity = "0.55"; }
+      if (blushL && blushR) { blushL.style.opacity = "0.35"; blushR.style.opacity = "0.35"; }
       if (captionText) captionText.textContent = "AMI is resting with you ☾";
     } else if (expr === "focus") {
       if (eyesHappy) eyesHappy.style.display = "none";
       if (eyesSleep) eyesSleep.style.display = "none";
       if (eyesNormal) eyesNormal.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.45"; blushR.style.opacity = "0.45"; }
+      if (blushL && blushR) { blushL.style.opacity = "0.25"; blushR.style.opacity = "0.25"; }
       if (captionText) captionText.textContent = "AMI is focusing alongside you ✿";
     } else {
       if (eyesHappy) eyesHappy.style.display = "none";
       if (eyesSleep) eyesSleep.style.display = "none";
       if (eyesNormal) eyesNormal.style.display = "";
-      if (blushL && blushR) { blushL.style.opacity = "0.45"; blushR.style.opacity = "0.45"; }
+      if (blushL && blushR) { blushL.style.opacity = "0.25"; blushR.style.opacity = "0.25"; }
       if (captionText) captionText.textContent = "AMI is here with you";
     }
   };
 
-  // Cute Web Audio Synth Chime
+  // EVE-Style Cheerful Electronic Chirp
   function playCuteSound() {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -563,14 +564,15 @@ function initAmiMotion() {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1046.5, now); // C6
-      osc.frequency.exponentialRampToValueAtTime(1567.98, now + 0.11); // G6
-      gain.gain.setValueAtTime(0.09, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      osc.frequency.setValueAtTime(783.99, now); // G5
+      osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.08); // C6
+      osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.16); // E6
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.3);
+      osc.stop(now + 0.35);
     } catch (_) {}
   }
 
