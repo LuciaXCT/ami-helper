@@ -378,6 +378,8 @@ function initAmiMotion() {
   const svg = document.querySelector(".ami-svg");
   const robot = document.getElementById("ami-bot-body");
   const antenna = document.getElementById("ami-antenna");
+  const earL = document.getElementById("ami-ear-left");
+  const earR = document.getElementById("ami-ear-right");
   const pupilL = document.getElementById("ami-pupil-left");
   const pupilR = document.getElementById("ami-pupil-right");
   const shineL = document.getElementById("ami-shine-left");
@@ -472,6 +474,12 @@ function initAmiMotion() {
     if (antenna) {
       const antTilt = -currentX * 7.5;
       antenna.style.transform = `rotate(${antTilt.toFixed(2)}deg)`;
+    }
+
+    if (earL && earR) {
+      const earTilt = -currentX * 4.2;
+      earL.style.transform = `rotate(${earTilt.toFixed(2)}deg)`;
+      earR.style.transform = `rotate(${earTilt.toFixed(2)}deg)`;
     }
 
     requestAnimationFrame(loop);
@@ -587,9 +595,13 @@ function initAmiMotion() {
     window.setAmiExpression("happy");
     svg.classList.add("ami-pet-bounce");
     if (antenna) antenna.classList.add("antenna-spring");
+    if (earL) earL.classList.add("ear-wiggle-left");
+    if (earR) earR.classList.add("ear-wiggle-right");
     setTimeout(() => {
       svg.classList.remove("ami-pet-bounce");
       if (antenna) antenna.classList.remove("antenna-spring");
+      if (earL) earL.classList.remove("ear-wiggle-left");
+      if (earR) earR.classList.remove("ear-wiggle-right");
       if (state.active && state.active.mode === "break") {
         window.setAmiExpression("sleep");
       } else {
@@ -615,6 +627,8 @@ function initAmiMotion() {
     window.setAmiExpression("happy");
     svg.classList.add("ami-pet-bounce");
     if (antenna) antenna.classList.add("antenna-spring");
+    if (earL) earL.classList.add("ear-wiggle-left");
+    if (earR) earR.classList.add("ear-wiggle-right");
 
     const line = petLines[Math.floor(Math.random() * petLines.length)];
     toast(line);
@@ -622,6 +636,8 @@ function initAmiMotion() {
     setTimeout(() => {
       svg.classList.remove("ami-pet-bounce");
       if (antenna) antenna.classList.remove("antenna-spring");
+      if (earL) earL.classList.remove("ear-wiggle-left");
+      if (earR) earR.classList.remove("ear-wiggle-right");
       window.amiIsInteracting = false;
       if (state.active && state.active.mode === "break") {
         window.setAmiExpression("sleep");

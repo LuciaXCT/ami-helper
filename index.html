@@ -36,18 +36,35 @@
           <svg class="ami-svg" viewBox="0 0 300 300" role="img" aria-label="A little pink robot with friendly eyes">
             <ellipse id="ami-shadow" cx="150" cy="267" rx="87" ry="13" fill="#e9d5cf" opacity=".55"/>
             <g id="ami-bot-body">
+              <!-- Teddy Bear Ears -->
+              <g id="ami-bear-ears">
+                <g class="ami-ear-left" id="ami-ear-left">
+                  <circle cx="84" cy="56" r="25" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
+                  <circle cx="84" cy="56" r="14" fill="#e8a8b1"/>
+                </g>
+                <g class="ami-ear-right" id="ami-ear-right">
+                  <circle cx="216" cy="56" r="25" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
+                  <circle cx="216" cy="56" r="14" fill="#e8a8b1"/>
+                </g>
+              </g>
+
+              <!-- Antenna -->
               <g id="ami-antenna">
                 <path d="M150 38v24" stroke="#a76572" stroke-width="8" stroke-linecap="round"/>
                 <circle cx="150" cy="33" r="12" fill="#dc9ba3"/>
                 <circle cx="150" cy="31" r="4" fill="#fff4ee"/>
               </g>
+
+              <!-- Head Body -->
               <rect x="57" y="61" width="186" height="166" rx="56" fill="#f2c8c5" stroke="#9e5f6b" stroke-width="5"/>
               <path d="M75 98c0-15 12-27 27-27h96c15 0 27 12 27 27v13H75z" fill="#f7dad5" opacity=".85"/>
+              
+              <!-- EVE-style Visor Screen (No mouth, purely expressive eyes) -->
               <rect id="ami-screen" x="75" y="100" width="150" height="91" rx="34" fill="#513d49"/>
               
               <!-- Cute blush -->
-              <ellipse id="ami-blush-left" cx="95" cy="156" rx="9" ry="5" fill="#f18a99" opacity="0.45"/>
-              <ellipse id="ami-blush-right" cx="205" cy="156" rx="9" ry="5" fill="#f18a99" opacity="0.45"/>
+              <ellipse id="ami-blush-left" cx="95" cy="158" rx="10" ry="6" fill="#f18a99" opacity="0.45"/>
+              <ellipse id="ami-blush-right" cx="205" cy="158" rx="10" ry="6" fill="#f18a99" opacity="0.45"/>
 
               <!-- Normal tracking eyes -->
               <g id="ami-eyes-normal">
@@ -75,9 +92,6 @@
                 <path d="M169 142 Q181 150 193 142" fill="none" stroke="#ffd8d6" stroke-width="4" stroke-linecap="round"/>
               </g>
 
-              <path id="ami-mouth" class="mouth" d="M137 166q13 12 26 0" fill="none" stroke="#f0a9b2" stroke-width="4" stroke-linecap="round"/>
-              <circle cx="61" cy="142" r="13" fill="#e6aeb0" stroke="#9e5f6b" stroke-width="4"/>
-              <circle cx="239" cy="142" r="13" fill="#e6aeb0" stroke="#9e5f6b" stroke-width="4"/>
               <path d="M90 222v18q0 17 17 17h13" fill="none" stroke="#9e5f6b" stroke-width="7" stroke-linecap="round"/>
               <path d="M210 222v18q0 17-17 17h-13" fill="none" stroke="#9e5f6b" stroke-width="7" stroke-linecap="round"/>
               <rect x="126" y="228" width="48" height="21" rx="10" fill="#d88792" stroke="#9e5f6b" stroke-width="3"/>
